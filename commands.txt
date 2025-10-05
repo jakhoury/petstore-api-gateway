@@ -1,0 +1,25 @@
+PS C:\aws\api> terraform output
+petstore_api_endpoints = {
+  "base_url" = "https://npw7j05yx7.execute-api.us-east-1.amazonaws.com/dev/"
+  "create_pet" = "https://npw7j05yx7.execute-api.us-east-1.amazonaws.com/dev/pets"
+  "delete_pet" = "https://npw7j05yx7.execute-api.us-east-1.amazonaws.com/dev/pets/{petId}"
+  "get_pet" = "https://npw7j05yx7.execute-api.us-east-1.amazonaws.com/dev/pets/{petId}"
+  "list_pets" = "https://npw7j05yx7.execute-api.us-east-1.amazonaws.com/dev/pets"
+  "update_pet" = "https://npw7j05yx7.execute-api.us-east-1.amazonaws.com/dev/pets/{petId}"
+}
+
+
+  curl -X POST `
+  -H "Content-Type: application/json" `
+  -d '{"petType":"Dog", "petName":"Simon","price":10000000}' `
+  https://8b398tmto8.execute-api.us-east-1.amazonaws.com/dev/pets
+
+  curl -X PUT `
+  -H "Content-Type: application/json" `
+  -d '{"price": 1.44, "petType": "Amoeba", "petName": "Lola"}' `
+  https://8b398tmto8.execute-api.us-east-1.amazonaws.com/dev/pets/e140b5a4-8bdc-40bb-9f42-e007cc52af09
+
+  curl -X PUT `
+  -H "Content-Type: application/json" `
+  -d '{"price":3.49,"petType":"Lunatic"}' `
+  https://8b398tmto8.execute-api.us-east-1.amazonaws.com/dev/pets/e140b5a4-8bdc-40bb-9f42-e007cc52af09

@@ -1,0 +1,184 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "PetStore",
+    "description": "Full CRUD PetStore API powered by AWS Lambda + DynamoDB backend",
+    "version": "1.1"
+  },
+  "schemes": ["https"],
+  "paths": {
+    "/": {
+      "get": {
+        "produces": ["text/html"],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "headers": {
+              "Content-Type": { "type": "string" }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": { "application/json": "{\"statusCode\":200}" },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Content-Type": "'text/html'"
+              },
+              "responseTemplates": {
+                "text/html": "<!DOCTYPE html><html><head><meta charset='utf-8'><title>Pet Store API</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:auto;color:#333;}pre{background:#f7f7f7;padding:10px;border-radius:6px;}</style></head><body><h1>Welcome to your Pet Store API</h1><p>This API is fully CRUD-enabled and powered by Lambda + DynamoDB.</p><p>To create a pet, send a <code>POST</code> request to <code>/pets</code> with:</p><pre>{&#10;  &quot;petName&quot;: &quot;Simon&quot;,&#10;  &quot;petType&quot;: &quot;cat&quot;,&#10;  &quot;price&quot;: 10000000&#10;}</pre><p>Use <code>GET /pets</code> to list and <code>GET /pets/{petId}</code> to retrieve.</p></body></html>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pets": {
+      "get": {
+        "summary": "List all pets",
+        "produces": ["application/json"],
+        "responses": { "200": { "description": "List of pets" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:${account_id}:function:PetStoreHandler/invocations"
+        }
+      },
+      "post": {
+        "summary": "Create a new pet",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "NewPet",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "petName": { "type": "string" },
+                "petType": { "type": "string" },
+                "price": { "type": "number" }
+              }
+            }
+          }
+        ],
+        "responses": { "201": { "description": "Pet created successfully" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:${account_id}:function:PetStoreHandler/invocations"
+        }
+      },
+      "options": {
+        "summary": "CORS support for /pets",
+        "responses": {
+          "200": {
+            "description": "CORS response",
+            "headers": {
+              "Access-Control-Allow-Origin": { "type": "string" },
+              "Access-Control-Allow-Methods": { "type": "string" },
+              "Access-Control-Allow-Headers": { "type": "string" }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": { "application/json": "{\"statusCode\": 200}" },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pets/{petId}": {
+      "get": {
+        "summary": "Retrieve a specific pet",
+        "parameters": [
+          { "name": "petId", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": { "200": { "description": "Pet retrieved successfully" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:${account_id}:function:PetStoreHandler/invocations"
+        }
+      },
+      "put": {
+        "summary": "Update a specific pet",
+        "parameters": [
+          { "name": "petId", "in": "path", "required": true, "type": "string" },
+          {
+            "in": "body",
+            "name": "PetUpdate",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "petName": { "type": "string" },
+                "petType": { "type": "string" },
+                "price": { "type": "number" }
+              }
+            }
+          }
+        ],
+        "responses": { "200": { "description": "Pet updated successfully" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:${account_id}:function:PetStoreHandler/invocations"
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific pet",
+        "parameters": [
+          { "name": "petId", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": { "200": { "description": "Pet deleted successfully" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:${account_id}:function:PetStoreHandler/invocations"
+        }
+      },
+      "options": {
+        "summary": "CORS support for /pets/{petId}",
+        "parameters": [
+          { "name": "petId", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": {
+            "description": "CORS response",
+            "headers": {
+              "Access-Control-Allow-Origin": { "type": "string" },
+              "Access-Control-Allow-Methods": { "type": "string" },
+              "Access-Control-Allow-Headers": { "type": "string" }
+            }
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": { "application/json": "{\"statusCode\": 200}" },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Methods": "'GET,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-amazon-apigateway-binary-media-types": []
+}
