@@ -17,11 +17,11 @@ This project demonstrates how to deploy a production-style serverless applicatio
 |                  |           |  REST API (AWS_PROXY)     |           |  (PetStoreHandler.py)  |
 |                  |           |  Stage: dev               |           |  CRUD Logic            |
 +------------------+           +---------------------------+           |  DynamoDB Access       |
-                                                                      |  CloudWatch Logs       |
-                                                                      +-----------+------------+
-                                                                                  |
-                                                                                  |
-                                                                                  v
+                                                                       |  CloudWatch Logs       |
+                                                                       +-----------+------------+
+                                                                                   |
+                                                                                   |
+                                                                                   v
                                                                       +------------------------+
                                                                       |   DynamoDB Table       |
                                                                       |   Name: PetsTable      |
